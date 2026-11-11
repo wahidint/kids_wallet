@@ -1,0 +1,32 @@
+@php $user = auth()->user(); @endphp
+
+<a href="{{ route('dashboard') }}" class="brand text-decoration-none mb-4 px-2">
+    <span class="brand-mark"><i class="bi bi-wallet2"></i></span> {{ config('app.name') }}
+</a>
+
+<nav class="nav flex-column gap-1 flex-grow-1">
+    @if ($user->isParent())
+        <a href="{{ route('parent.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('parent.dashboard')])>
+            <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+    @else
+        <a href="{{ route('child.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('child.dashboard')])>
+            <i class="bi bi-house-heart"></i> My Wallet
+        </a>
+    @endif
+</nav>
+
+<div class="user-chip mt-4">
+    <div class="avatar">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</div>
+    <div class="small lh-sm min-w-0">
+        <div class="fw-semibold text-truncate">{{ $user->name }}</div>
+        <div class="text-secondary">{{ $user->role->label() }}</div>
+    </div>
+</div>
+
+<form method="POST" action="{{ route('logout') }}" class="mt-2">
+    @csrf
+    <button type="submit" class="nav-link w-100 text-start border-0 bg-transparent">
+        <i class="bi bi-box-arrow-right"></i> Log out
+    </button>
+</form>

@@ -1,0 +1,75 @@
+@extends('layouts.guest')
+
+@section('title', 'Log in')
+
+@section('content')
+    <h1 class="h3 fw-bold mb-1">Welcome back 👋</h1>
+    <p class="text-secondary mb-4">Log in to your {{ config('app.name') }} account.</p>
+
+    <form method="POST" action="{{ route('login') }}" novalidate>
+        @csrf
+
+        <div class="mb-3">
+            <label for="email" class="form-label fw-medium">Email address</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}"
+                   @class(['form-control form-control-lg', 'is-invalid' => $errors->has('email')])
+                   required autofocus autocomplete="username">
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label fw-medium">Password</label>
+            <input id="password" type="password" name="password"
+                   @class(['form-control form-control-lg', 'is-invalid' => $errors->has('password')])
+                   required autocomplete="current-password">
+            @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="remember" id="remember" @checked(old('remember'))>
+            <label class="form-check-label" for="remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="btn btn-kw btn-lg w-100">Log in</button>
+    </form>
+
+    @if (app()->environment('local'))
+        <div class="demo-box mt-4">
+            <div class="small fw-semibold mb-2">
+                <i class="bi bi-info-circle text-kw"></i> Demo accounts
+                <span class="text-secondary fw-normal">(click to fill · password: password)</span>
+            </div>
+            <div class="list-group list-group-flush small">
+                @foreach ([
+                    ['Rahim Ahmed', 'rahim@demo.com', 'Parent'],
+                    ['Nasreen Ahmed', 'nasreen@demo.com', 'Parent'],
+                    ['Karim Hossain', 'karim@demo.com', 'Parent'],
+                    ['Ayaan Ahmed', 'ayaan@demo.com', 'Child'],
+                    ['Maya Ahmed', 'maya@demo.com', 'Child'],
+                    ['Tasnim Hossain', 'tasnim@demo.com', 'Child'],
+                ] as [$name, $email, $role])
+                    <button type="button" class="list-group-item list-group-item-action demo-login d-flex justify-content-between align-items-center" data-email="{{ $email }}">
+                        <span>{{ $name }} <span class="text-secondary">· {{ $email }}</span></span>
+                        <span class="badge rounded-pill text-bg-light">{{ $role }}</span>
+                    </button>
+                @endforeach
+            </div>
+        </div>
+
+        @push('scripts')
+            <script>
+                document.querySelectorAll('.demo-login').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        document.getElementById('email').value = button.dataset.email;
+                        document.getElementById('password').value = 'password';
+                        document.getElementById('password').focus();
+                    });
+                });
+            </script>
+        @endpush
+    @endif
+@endsection
