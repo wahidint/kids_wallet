@@ -3,6 +3,8 @@
 @section('title', $child->name)
 
 @section('content')
+    @php $firstName = \Illuminate\Support\Str::before($child->name, ' '); @endphp
+
     <a href="{{ route('parent.dashboard') }}" class="text-secondary text-decoration-none small">
         <i class="bi bi-arrow-left"></i> Back to dashboard
     </a>
@@ -23,24 +25,8 @@
         </a>
     </div>
 
-    @if ($wallet->is_locked)
-        <div class="alert alert-warning d-flex gap-3 align-items-start rounded-4">
-            <i class="bi bi-lock-fill fs-4"></i>
-            <div>
-                <div class="fw-semibold">This wallet is locked</div>
-                <div class="small">
-                    Locked by {{ $wallet->lockedBy?->name ?? 'a parent' }}{{ $wallet->locked_at ? ' on '.$wallet->locked_at->format('j M Y, g:i A') : '' }}.
-                    @if ($wallet->lock_reason)
-                        Reason: “{{ $wallet->lock_reason }}”.
-                    @endif
-                    Spending is paused; you can still add money.
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <div class="row g-3 mb-4">
-        <div class="col-lg-5">
+    <div class="row g-3 mb-3">
+        <div class="col-lg-6">
             <div class="kw-card balance-card h-100 p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="small opacity-75">Current balance</div>
@@ -52,8 +38,143 @@
                 <div class="balance-amount mt-2">৳{{ number_format($wallet->balance, 2) }}</div>
             </div>
         </div>
-        <div class="col-sm-6 col-lg-
-3 col-lg-35">
+        <div class="col-sm-6 col-lg-3">
+            <div class="kw-card stat-card h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon text-success" style="background:#DCFCE7;"><i class="bi bi-arrow-down-left"></i></div>
+                <div>
+                    <div class="stat-label">Received this month</div>
+                    <div class="stat-value">৳{{ number_format($monthIncome, 2) }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="kw-card stat-card h-100 d-flex align-items-center gap-3">
+                <div class="stat-icon text-danger" style="background:#FEE2E2;"><i class="bi bi-arrow-up-right"></i></div>
+                <div>
+                    <div class="stat-label">Spent this month</div>
+                    <div class="stat-value">৳{{ number_format($monthSpending, 2) }}</div>
+                </div>
+            </div>
         </div>
     </div>
+
+    {{-- F9: Emergency Wallet Lock --}}
+    <div @class(['kw-card lock-card mb-4 d-flex flex-wrap align-items-center gap-3', 'is-locked' => $wallet->is_locked])>
+        <div class="lock-icon">
+            <i class="bi {{ $wallet->is_locked ? 'bi-lock-fill' : 'bi-unlock' }}"></i>
+        </div>
+        <div class="flex-grow-1 min-w-0">
+            <div class="fw-semibold">Emergency wallet lock</div>
+            @if ($wallet->is_locked)
+                <div class="small">
+                    <span class="text-danger fw-semibold">Locked</span>
+                    by {{ $wallet->lockedBy?->name ?? 'a parent' }}{{ $wallet->locked_at ? ' on '.$wallet->locked_at->format('j M Y, g:i A') : '' }}.
+                    @if ($wallet->lock_reason)
+                        Reason: “{{ $wallet->lock_reason }}”.
+                    @endif
+                    Spending is paused; you can still add money.
+                </div>
+            @else
+                <div class="small text-secondary">
+                    <span class="text-success fw-semibold">Active.</span>
+                    Lost phone or something looks wrong? Lock the wallet to stop all spending instantly.
+                </div>
+            @endif
+        </div>
+
+        @if ($wallet->is_locked)
+            <form method="POST" action="{{ route('parent.children.unlock', $child) }}"
+                  onsubmit="return confirm('Unlock {{ $firstName }}\'s wallet? Spending will be allowed again.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-success rounded-pill px-4">
+                    <i class="bi bi-unlock"></i> Unlock wallet
+                </button>
+            </form>
+        @else
+            <button type="button" class="btn btn-outline-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#lockModal">
+                <i class="bi bi-lock"></i> Lock wallet
+            </button>
+        @endif
+    </div>
+
+    <div class="kw-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="h6 fw-semibold mb-0">Transaction history</h3>
+            <span class="small text-secondary">{{ $transactions->total() }} transactions</span>
+        </div>
+
+        @forelse ($transactions as $transaction)
+            @include('partials.transaction-row')
+        @empty
+            <div class="empty-state">
+                <i class="bi bi-receipt"></i>
+                <p class="mt-2 mb-0">No transactions yet. Add some pocket money to get started.</p>
+            </div>
+        @endforelse
+
+        @if ($transactions->hasPages())
+            <div class="mt-3">{{ $transactions->links() }}</div>
+        @endif
+    </div>
+
+    {{-- Lock confirmation popup --}}
+    @unless ($wallet->is_locked)
+        <div class="modal fade" id="lockModal" tabindex="-1" aria-labelledby="lockModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form method="POST" action="{{ route('parent.children.lock', $child) }}" class="modal-content rounded-4 border-0" id="lockForm">
+                    @csrf
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold" id="lockModalLabel">
+                            <i class="bi bi-lock-fill text-danger"></i> Lock {{ $firstName }}'s wallet?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-secondary">
+                            All spending stops immediately. {{ $firstName }} can still log in and see the balance and history,
+                            and you can still add money.
+                        </p>
+                        <div class="small fw-medium mb-2">Quick reason</div>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            @foreach (['Lost phone', 'Too much spending', 'Suspicious activity', 'Taking a short break'] as $suggestion)
+                                <button type="button" class="btn btn-sm btn-light border rounded-pill reason-chip">{{ $suggestion }}</button>
+                            @endforeach
+                        </div>
+                        <x-form-input name="reason" :label="'Reason (shown to '.$firstName.')'" maxlength="150" placeholder="Optional" />
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4" id="lockSubmit">
+                            <i class="bi bi-lock-fill"></i> Lock wallet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endunless
 @endsection
+
+@push('scripts')
+    <script>
+        const reasonInput = document.getElementById('reason');
+
+        document.querySelectorAll('.reason-chip').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                reasonInput.value = chip.textContent.trim();
+                reasonInput.focus();
+            });
+        });
+
+        document.getElementById('lockForm')?.addEventListener('submit', () => {
+            const button = document.getElementById('lockSubmit');
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Locking...';
+        });
+
+        @if ($errors->has('reason'))
+            // Re-open the popup so the error message is visible
+            new bootstrap.Modal(document.getElementById('lockModal')).show();
+        @endif
+    </script>
+@endpush

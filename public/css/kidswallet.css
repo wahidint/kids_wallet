@@ -238,3 +238,16 @@ body {
 .btn-check:checked + .choice-pill { background: var(--kw-pink-soft); border-color: var(--kw-pink); color: var(--kw-pink); }
 .btn-check:checked + .choice-pill i { color: var(--kw-pink); }
 .btn-check:focus-visible + .choice-pill { box-shadow: 0 0 0 .2rem rgba(226, 19, 110, .2); }
+
+/* ---------- Bangla characters (৳) use Hind Siliguri ---------- */
+body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+
+/* ---------- F9: Emergency wallet lock ---------- */
+.lock-card { border-left: 4px solid var(--kw-green); }
+.lock-card.is-locked { border-left-color: var(--kw-red); background: #FEF2F2; }
+.lock-icon {
+    width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
+    display: grid; place-items: center; font-size: 1.3rem;
+    background: #DCFCE7; color: var(--kw-green);
+}
+.lock-card.is-locked .lock-icon { background: #FEE2E2; color: var(--kw-red); }
