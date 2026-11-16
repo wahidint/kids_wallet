@@ -190,3 +190,21 @@ body {
 .chip-2 { top: 45%; right: -8%; }
 .chip-3 { bottom: 10%; left: 8%; }
 @media (max-width: 575.98px) { .chip-1 { left: 2%; } .chip-2 { right: 2%; } }
+
+
+/* ---------- Registration: role picker ---------- */
+.role-option {
+    display: flex; flex-direction: column; align-items: center; gap: .25rem;
+    text-align: center; padding: 1rem .75rem; cursor: pointer;
+    background: #fff; border: 2px solid var(--kw-border); border-radius: 16px;
+    transition: border-color .15s, background .15s;
+}
+.role-option i { font-size: 1.6rem; color: var(--kw-muted); }
+.btn-check:checked + .role-option { border-color: var(--kw-pink); background: var(--kw-pink-soft); }
+.btn-check:checked + .role-option i { color: var(--kw-pink); }
+.btn-check:focus-visible + .role-option { box-shadow: 0 0 0 .2rem rgba(226, 19, 110, .2); }
+
+.link-code-input {
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .3em; text-transform: uppercase;
+}

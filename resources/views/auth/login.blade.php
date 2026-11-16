@@ -4,34 +4,22 @@
 
 @section('content')
     <h1 class="h3 fw-bold mb-1">Welcome back 👋</h1>
-    <p class="text-secondary mb-4">Log in to your {{ config('app.name') }} account.</p>
+    <p class="text-secondary mb-4">
+        New here? <a href="{{ route('register') }}" class="text-kw fw-medium">Create an account</a>
+    </p>
 
     <form method="POST" action="{{ route('login') }}" novalidate>
         @csrf
 
-        <div class="mb-3">
-            <label for="email" class="form-label fw-medium">Email address</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}"
-                   @class(['form-control form-control-lg', 'is-invalid' => $errors->has('email')])
-                   required autofocus autocomplete="username">
-            @error('email')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+        <x-form-input name="email" label="Email address" type="email" required autofocus autocomplete="username" />
+        <x-form-input name="password" label="Password" type="password" required autocomplete="current-password" />
 
-        <div class="mb-3">
-            <label for="password" class="form-label fw-medium">Password</label>
-            <input id="password" type="password" name="password"
-                   @class(['form-control form-control-lg', 'is-invalid' => $errors->has('password')])
-                   required autocomplete="current-password">
-            @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-check mb-4">
-            <input class="form-check-input" type="checkbox" name="remember" id="remember" @checked(old('remember'))>
-            <label class="form-check-label" for="remember">Remember me</label>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember" @checked(old('remember'))>
+                <label class="form-check-label" for="remember">Remember me</label>
+            </div>
+            <a href="{{ route('password.request') }}" class="small text-kw text-decoration-none">Forgot password?</a>
         </div>
 
         <button type="submit" class="btn btn-kw btn-lg w-100">Log in</button>

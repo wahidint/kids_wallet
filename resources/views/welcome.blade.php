@@ -10,11 +10,14 @@
     <a href="{{ route('home') }}" class="brand text-decoration-none">
         <span class="brand-mark"><i class="bi bi-wallet2"></i></span> {{ config('app.name') }}
     </a>
-    @auth
-        <a href="{{ route('dashboard') }}" class="btn btn-kw rounded-pill px-4">Go to dashboard</a>
-    @else
-        <a href="{{ route('login') }}" class="btn btn-kw rounded-pill px-4">Log in</a>
-    @endauth
+    <div class="d-flex gap-2">
+        @auth
+            <a href="{{ route('dashboard') }}" class="btn btn-kw rounded-pill px-4">Go to dashboard</a>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-light border rounded-pill px-4">Log in</a>
+            <a href="{{ route('register') }}" class="btn btn-kw rounded-pill px-4 d-none d-sm-inline-block">Create account</a>
+        @endauth
+    </div>
 </nav>
 
 <header class="container py-4 py-lg-5">
@@ -27,11 +30,16 @@
             <p class="lead text-secondary my-4">
                 A bKash-inspired digital wallet where children save, spend and learn, and parents stay in control.
             </p>
-            @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-kw btn-lg rounded-pill px-5">Open my wallet</a>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-kw btn-lg rounded-pill px-5">Log in</a>
-            @endauth
+            <div class="d-flex flex-wrap gap-3">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="btn btn-kw btn-lg rounded-pill px-5">Open my wallet</a>
+                @else
+                    <a href="{{ route('register') }}" class="btn btn-kw btn-lg rounded-pill px-5">Get started</a>
+                    <a href="{{ route('register', ['role' => 'child']) }}" class="btn btn-light border btn-lg rounded-pill px-4">
+                        <i class="bi bi-emoji-smile"></i> I'm a kid
+                    </a>
+                @endauth
+            </div>
         </div>
         <div class="col-lg-6">
             <div class="hero-visual">
