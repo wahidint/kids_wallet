@@ -36,14 +36,15 @@ enum TransactionSource: string
 
     /**
      * Does this count toward spending limits (F2)?
-     * Moving money into savings is NOT spending.
+     * Only everyday spending. Approved purchases (F4) are already controlled
+     * by a parent's approval, and moving money into savings is not spending.
      */
     public function countsAsSpending(): bool
     {
-        return in_array($this, [self::Spend, self::Purchase], true);
+        return $this === self::Spend;
     }
 
-    /** Database values of all spending sources, e.g. ['spend', 'purchase']. */
+    /** Database values of all limit-counted sources, e.g. ['spend']. */
     public static function spendingValues(): array
     {
         return array_values(array_map(

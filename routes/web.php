@@ -5,11 +5,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
+use App\Http\Controllers\Child\PurchaseRequestController;
 use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\PocketMoneyController;
+use App\Http\Controllers\Parent\PurchaseApprovalController;
 use App\Http\Controllers\Parent\SpendingLimitController;
 use App\Http\Controllers\Parent\WalletLockController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +47,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function () {
         Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
 
+        // F4: Purchase Approval ("can:decide" = only their own children's requests)
+        Route::get('/purchases', [PurchaseApprovalController::class, 'index'])->name('purchases.index');
+        Route::post('/purchases/{purchase}/approve', [PurchaseApprovalController::class, 'approve'])
+            ->name('purchases.approve')->can('decide', 'purchase');
+        Route::post('/purchases/{purchase}/reject', [PurchaseApprovalController::class, 'reject'])
+            ->name('purchases.reject')->can('decide', 'purchase');
+
         // Everything about ONE child. "can:manage-child,child" = only their own children.
         Route::middleware('can:manage-child,child')
             ->prefix('children/{child}')
@@ -73,5 +82,14 @@ Route::middleware('auth')->group(function () {
         // F2: Child spending (limits are checked inside WalletService)
         Route::get('/spend', [SpendController::class, 'create'])->name('spend.create');
         Route::post('/spend', [SpendController::class, 'store'])->name('spend.store');
+
+        // F4: Purchase requests ("can:manageOwn" = only their own requests)
+        Route::get('/purchases', [PurchaseRequestController::class, 'index'])->name('purchases.index');
+        Route::get('/purchases/new', [PurchaseRequestController::class, 'create'])->name('purchases.create');
+        Route::post('/purchases', [PurchaseRequestController::class, 'store'])->name('purchases.store');
+        Route::post('/purchases/{purchase}/complete', [PurchaseRequestController::class, 'complete'])
+            ->name('purchases.complete')->can('manageOwn', 'purchase');
+        Route::post('/purchases/{purchase}/cancel', [PurchaseRequestController::class, 'cancel'])
+            ->name('purchases.cancel')->can('manageOwn', 'purchase');
     });
 });

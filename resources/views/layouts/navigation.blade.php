@@ -1,4 +1,12 @@
-@php $user = auth()->user(); @endphp
+@php
+    $user = auth()->user();
+    $pendingApprovals = $user->isParent()
+        ? \App\Models\PurchaseRequest::forParent($user)->pending()->count()
+        : 0;
+    $readyToBuy = $user->isChild()
+        ? \App\Models\PurchaseRequest::where('requested_by', $user->id)->approved()->count()
+        : 0;
+@endphp
 
 <a href="{{ route('dashboard') }}" class="brand text-decoration-none mb-4 px-2">
     <span class="brand-mark"><i class="bi bi-wallet2"></i></span> {{ config('app.name') }}
@@ -9,12 +17,24 @@
         <a href="{{ route('parent.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('parent.dashboard', 'parent.children.*')])>
             <i class="bi bi-grid-1x2"></i> Dashboard
         </a>
+        <a href="{{ route('parent.purchases.index') }}" @class(['nav-link', 'active' => request()->routeIs('parent.purchases.*')])>
+            <i class="bi bi-patch-check"></i> Purchase requests
+            @if ($pendingApprovals > 0)
+                <span class="badge rounded-pill text-bg-warning ms-auto">{{ $pendingApprovals }}</span>
+            @endif
+        </a>
     @else
         <a href="{{ route('child.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('child.dashboard')])>
             <i class="bi bi-house-heart"></i> My Wallet
         </a>
         <a href="{{ route('child.spend.create') }}" @class(['nav-link', 'active' => request()->routeIs('child.spend.*')])>
             <i class="bi bi-bag-check"></i> Spend money
+        </a>
+        <a href="{{ route('child.purchases.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.purchases.*')])>
+            <i class="bi bi-patch-question"></i> Ask to buy
+            @if ($readyToBuy > 0)
+                <span class="badge rounded-pill text-bg-info ms-auto">{{ $readyToBuy }}</span>
+            @endif
         </a>
     @endif
 </nav>

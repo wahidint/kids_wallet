@@ -259,3 +259,28 @@ body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe
     border-radius: 16px; padding: .9rem 1rem; font-size: .9rem;
 }
 .tip-card > i { font-size: 1.2rem; color: #F59E0B; }
+
+/* ---------- F2: Spending limits ---------- */
+.limit-row + .limit-row { margin-top: 1rem; }
+.limit-progress { height: 10px; border-radius: 999px; background: var(--kw-border); }
+.limit-progress .progress-bar { border-radius: 999px; }
+
+.limit-summary {
+    display: flex; gap: .6rem; align-items: center;
+    padding: .7rem .9rem; border-radius: 14px; font-size: .9rem;
+    background: #ECFDF5; color: #065F46;
+}
+.limit-summary.is-warning { background: #FFFBEB; color: #92400E; }
+.limit-summary.is-reached { background: #FEF2F2; color: #991B1B; }
+
+/* ---------- F4: Purchase approval ---------- */
+.request-actions {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem;
+    margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--kw-border);
+}
+.request-actions > .form-control { flex: 1 1 240px; }
+.parent-note {
+    background: var(--kw-pink-soft); color: var(--kw-ink);
+    border-radius: 12px; padding: .5rem .75rem;
+}
+.parent-note i { color: var(--kw-pink); }
