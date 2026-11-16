@@ -208,3 +208,33 @@ body {
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     letter-spacing: .3em; text-transform: uppercase;
 }
+
+/* ---------- F1: Pocket money ---------- */
+.avatar-xl { width: 64px; height: 64px; font-size: 1.5rem; }
+.child-name-link { color: inherit; text-decoration: none; }
+.child-name-link:hover { color: var(--kw-pink); }
+
+.amount-group .form-control { font-size: 1.75rem; }
+.amount-group .input-group-text {
+    font-weight: 600; color: var(--kw-pink);
+    background: var(--kw-pink-soft); border-color: var(--bs-border-color);
+}
+.amount-group input::-webkit-outer-spin-button,
+.amount-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.amount-group input[type=number] { -moz-appearance: textfield; }
+
+.quick-amount.active {
+    background: var(--kw-pink-soft); color: var(--kw-pink);
+    border-color: var(--kw-pink) !important;
+}
+
+.choice-pill {
+    display: inline-flex; align-items: center; gap: .4rem; cursor: pointer;
+    padding: .5rem .9rem; border-radius: 999px;
+    background: #fff; border: 1.5px solid var(--kw-border);
+    font-weight: 500; font-size: .9rem;
+}
+.choice-pill i { color: var(--kw-muted); }
+.btn-check:checked + .choice-pill { background: var(--kw-pink-soft); border-color: var(--kw-pink); color: var(--kw-pink); }
+.btn-check:checked + .choice-pill i { color: var(--kw-pink); }
+.btn-check:focus-visible + .choice-pill { box-shadow: 0 0 0 .2rem rgba(226, 19, 110, .2); }

@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Parent\ChildController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
+use App\Http\Controllers\Parent\PocketMoneyController;
 use Illuminate\Support\Facades\Route;
 
 // Public landing page
@@ -36,12 +38,24 @@ Route::middleware('auth')->group(function () {
     // Sends each user to their own dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    // Parent-only pages: URLs start with /parent, names start with "parent."
+    // ---------------- Parent-only pages ----------------
     Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function () {
         Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+
+        // Everything about ONE child. "can:manage-child,child" = only their own children.
+        Route::middleware('can:manage-child,child')
+            ->prefix('children/{child}')
+            ->name('children.')
+            ->group(function () {
+                Route::get('/', [ChildController::class, 'show'])->name('show');
+
+                // F1: Digital Pocket Money
+                Route::get('/add-money', [PocketMoneyController::class, 'create'])->name('pocket-money.create');
+                Route::post('/add-money', [PocketMoneyController::class, 'store'])->name('pocket-money.store');
+            });
     });
 
-    // Child-only pages: URLs start with /child, names start with "child."
+    // ---------------- Child-only pages ----------------
     Route::middleware('role:child')->prefix('child')->name('child.')->group(function () {
         Route::get('/dashboard', [ChildDashboardController::class, 'index'])->name('dashboard');
     });

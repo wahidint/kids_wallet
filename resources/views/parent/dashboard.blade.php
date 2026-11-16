@@ -53,10 +53,12 @@
                 <h3 class="h6 fw-semibold mb-2">Your children</h3>
 
                 @forelse ($children as $child)
-                    <div class="d-flex align-items-center gap-3 py-3 border-bottom child-row">
+                    <div class="d-flex flex-wrap align-items-center gap-3 py-3 border-bottom child-row">
                         <div class="avatar avatar-lg">{{ mb_strtoupper(mb_substr($child->name, 0, 1)) }}</div>
                         <div class="flex-grow-1 min-w-0">
-                            <div class="fw-semibold">{{ $child->name }}</div>
+                            <a href="{{ route('parent.children.show', $child) }}" class="fw-semibold child-name-link">
+                                {{ $child->name }}
+                            </a>
                             <div class="small text-secondary">
                                 @if ($child->date_of_birth)
                                     Age {{ $child->date_of_birth->age }} ·
@@ -68,9 +70,17 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="text-end">
+                        <div class="text-end me-2">
                             <div class="small text-secondary">Balance</div>
                             <div class="fw-bold">৳{{ number_format($child->wallet?->balance ?? 0, 2) }}</div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('parent.children.pocket-money.create', $child) }}" class="btn btn-sm btn-kw rounded-pill" title="Add money">
+                                <i class="bi bi-plus-lg"></i><span class="d-none d-sm-inline"> Add money</span>
+                            </a>
+                            <a href="{{ route('parent.children.show', $child) }}" class="btn btn-sm btn-light border rounded-pill" title="View wallet">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
                         </div>
                     </div>
                 @empty
