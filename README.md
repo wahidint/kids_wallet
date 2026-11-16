@@ -1,66 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kids Wallet
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A bKash-inspired digital wallet for children under 16, with parental supervision.
+Laravel 12 · MySQL (XAMPP) · Bootstrap 5 · Chart.js
 
-## About Laravel
+> Academic simulation project: no real money is transferred.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1. One-time setup (Windows)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### What you need
+| Tool | Check it with | Need |
+|---|---|---|
+| XAMPP (PHP + MySQL) | `php -v` | PHP **8.2 or newer** |
+| Composer | `composer -V` | any 2.x |
+| Git | `git --version` | any |
 
-## Learning Laravel
+**If `php -v` says "not recognized":** add `C:\xampp\php` to your PATH
+(Windows search → *Edit the system environment variables* → Environment Variables →
+User variables → **Path** → Edit → New → `C:\xampp\php` → OK), then restart VS Code completely.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Enable two PHP extensions:** XAMPP Control Panel → Apache **Config** → **PHP (php.ini)**.
+Remove the `;` at the start of these two lines and save:
+```
+extension=zip
+extension=intl
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Composer:** install from https://getcomposer.org/download/ (Composer-Setup.exe).
+When asked for PHP, pick `C:\xampp\php\php.exe`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Tell Git who you are** (use your GitHub email, so your commits count as yours):
+```
+git config --global user.name "Your Name"
+git config --global user.email "your-github-email@example.com"
+```
 
-## Laravel Sponsors
+### Get the project running
+1. Accept the GitHub collaborator invitation (check your email).
+2. Open the **XAMPP Control Panel** and click **Start** next to **MySQL**.
+3. Run these commands in a terminal (VS Code: Ctrl + `), one at a time:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+mkdir C:\Projects
+cd C:\Projects
+git clone https://github.com/wahidint/kids_wallet.git kids-wallet
+cd kids-wallet
+composer install
+copy .env.example .env
+php artisan key:generate
+C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE kids_wallet CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+php artisan migrate:fresh --seed
+php artisan serve
+```
 
-### Premium Partners
+4. Open **http://127.0.0.1:8000**. Done!
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+| Command | What it does |
+|---|---|
+| `git clone` | Downloads the code (a browser window may ask you to sign in to GitHub) |
+| `composer install` | Downloads Laravel and its packages into `vendor/` |
+| `copy .env.example .env` | Creates your local settings file |
+| `php artisan key:generate` | Creates your app's secret encryption key |
+| `mysql ... CREATE DATABASE` | Creates the empty `kids_wallet` database |
+| `migrate:fresh --seed` | Builds all tables and fills them with demo data |
+| `php artisan serve` | Starts the website (Ctrl + C to stop) |
 
-## Contributing
+### Demo accounts (password for all: `password`)
+| Name | Email | Role |
+|---|---|---|
+| Rahim Ahmed | rahim@demo.com | Parent of Ayaan and Maya |
+| Nasreen Ahmed | nasreen@demo.com | Parent of Ayaan and Maya |
+| Karim Hossain | karim@demo.com | Parent of Tasnim |
+| Ayaan Ahmed | ayaan@demo.com | Child (age 12, has spending limits) |
+| Maya Ahmed | maya@demo.com | Child (age 9) |
+| Tasnim Hossain | tasnim@demo.com | Child (wallet starts **locked**) |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 2. Every time you work on the project
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+cd C:\Projects\kids-wallet
+git pull
+composer install
+php artisan migrate:fresh --seed
+php artisan serve
+```
+(Start MySQL in XAMPP first.) `migrate:fresh --seed` resets your local database to the
+latest tables and demo data. It wipes your own test data, which is fine for development.
 
-## Security Vulnerabilities
+## 3. Making changes (so your contribution shows on GitHub)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Work on your own branch, never directly on `main`:
+```
+git checkout main
+git pull
+git checkout -b yourname/short-description
+```
+After your change works:
+```
+git add .
+git commit -m "Clear description of what you changed"
+git push -u origin yourname/short-description
+```
+Then on GitHub: **Compare & pull request** → **Create pull request**. The team lead reviews and merges it.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 4. Team rules (keep the app consistent)
+- **Never change a balance directly.** Always use `App\Services\WalletService`
+  (`credit()`, `debit()`, `lock()`, `unlock()`). It records every transaction safely.
+- Parent pages about one child go inside the `children/{child}` route group in `routes/web.php`
+  (it already checks the `manage-child` permission).
+- Use `<x-form-input>` for form fields and the existing CSS classes (`kw-card`, `btn-kw`, …).
+- Never edit a migration that has already been pushed. Create a new migration instead.
+- Never commit `.env`.
+
+## 5. Troubleshooting
+| Problem | Fix |
+|---|---|
+| `'php' is not recognized` | Add `C:\xampp\php` to PATH, restart VS Code |
+| `No connection could be made… actively refused it` | MySQL is stopped: start it in XAMPP |
+| `Unknown database 'kids_wallet'` | Run the `CREATE DATABASE` command above |
+| `No application encryption key` | Run `php artisan key:generate` |
+| `Class "…" not found` after `git pull` | Run `composer install`, then `php artisan optimize:clear` |
+| Page looks unstyled | You're offline: Bootstrap and fonts load from the internet |
+| MySQL won't start in XAMPP | Another MySQL may be using port 3306; close it or ask the team |
