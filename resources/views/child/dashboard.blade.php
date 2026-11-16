@@ -3,8 +3,15 @@
 @section('title', 'My Wallet')
 
 @section('content')
-    <h2 class="h3 fw-bold mb-1">Hi {{ \Illuminate\Support\Str::before($child->name, ' ') }}! 👋</h2>
-    <p class="text-secondary mb-4">Every taka you save today is a step toward your goals.</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">Hi {{ \Illuminate\Support\Str::before($child->name, ' ') }}! 👋</h2>
+            <p class="text-secondary mb-0">Every taka you save today is a step toward your goals.</p>
+        </div>
+        <a href="{{ route('child.spend.create') }}" class="btn btn-kw rounded-pill px-4">
+            <i class="bi bi-bag-check"></i> Spend money
+        </a>
+    </div>
 
     @if ($wallet->is_locked)
         <div class="alert alert-warning d-flex gap-3 align-items-start rounded-4">

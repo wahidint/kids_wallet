@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
+use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
@@ -63,5 +64,9 @@ Route::middleware('auth')->group(function () {
     // ---------------- Child-only pages ----------------
     Route::middleware('role:child')->prefix('child')->name('child.')->group(function () {
         Route::get('/dashboard', [ChildDashboardController::class, 'index'])->name('dashboard');
+
+        // F2: Child spending (limits are checked inside WalletService)
+        Route::get('/spend', [SpendController::class, 'create'])->name('spend.create');
+        Route::post('/spend', [SpendController::class, 'store'])->name('spend.store');
     });
 });

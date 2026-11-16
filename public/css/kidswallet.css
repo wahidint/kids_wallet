@@ -251,3 +251,11 @@ body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe
     background: #DCFCE7; color: var(--kw-green);
 }
 .lock-card.is-locked .lock-icon { background: #FEE2E2; color: var(--kw-red); }
+
+/* ---------- F2: Child spending ---------- */
+.tip-card {
+    display: flex; gap: .75rem; align-items: flex-start;
+    background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;
+    border-radius: 16px; padding: .9rem 1rem; font-size: .9rem;
+}
+.tip-card > i { font-size: 1.2rem; color: #F59E0B; }

@@ -6,12 +6,15 @@
 
 <nav class="nav flex-column gap-1 flex-grow-1">
     @if ($user->isParent())
-        <a href="{{ route('parent.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('parent.dashboard')])>
+        <a href="{{ route('parent.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('parent.dashboard', 'parent.children.*')])>
             <i class="bi bi-grid-1x2"></i> Dashboard
         </a>
     @else
         <a href="{{ route('child.dashboard') }}" @class(['nav-link', 'active' => request()->routeIs('child.dashboard')])>
             <i class="bi bi-house-heart"></i> My Wallet
+        </a>
+        <a href="{{ route('child.spend.create') }}" @class(['nav-link', 'active' => request()->routeIs('child.spend.*')])>
+            <i class="bi bi-bag-check"></i> Spend money
         </a>
     @endif
 </nav>
