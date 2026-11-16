@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
 use App\Http\Controllers\Child\PurchaseRequestController;
+use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
@@ -82,6 +83,17 @@ Route::middleware('auth')->group(function () {
         // F2: Child spending (limits are checked inside WalletService)
         Route::get('/spend', [SpendController::class, 'create'])->name('spend.create');
         Route::post('/spend', [SpendController::class, 'store'])->name('spend.store');
+
+        // F3: Savings Goals ("can:manage" = only their own goals)
+        Route::get('/goals', [SavingsGoalController::class, 'index'])->name('goals.index');
+        Route::get('/goals/new', [SavingsGoalController::class, 'create'])->name('goals.create');
+        Route::post('/goals', [SavingsGoalController::class, 'store'])->name('goals.store');
+        Route::post('/goals/{goal}/contribute', [SavingsGoalController::class, 'contribute'])
+            ->name('goals.contribute')->can('manage', 'goal');
+        Route::post('/goals/{goal}/withdraw', [SavingsGoalController::class, 'withdraw'])
+            ->name('goals.withdraw')->can('manage', 'goal');
+        Route::delete('/goals/{goal}', [SavingsGoalController::class, 'destroy'])
+            ->name('goals.destroy')->can('manage', 'goal');
 
         // F4: Purchase requests ("can:manageOwn" = only their own requests)
         Route::get('/purchases', [PurchaseRequestController::class, 'index'])->name('purchases.index');

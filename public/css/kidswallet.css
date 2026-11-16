@@ -221,7 +221,7 @@ body {
 }
 .amount-group input::-webkit-outer-spin-button,
 .amount-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-group input[type=number] { -moz-appearance: textfield; }
+.amount-group input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 .quick-amount.active {
     background: var(--kw-pink-soft); color: var(--kw-pink);
@@ -284,3 +284,32 @@ body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe
     border-radius: 12px; padding: .5rem .75rem;
 }
 .parent-note i { color: var(--kw-pink); }
+
+/* ---------- F3: Savings goals ---------- */
+.goal-card {
+    background: #fff; border: 1px solid var(--kw-border);
+    border-radius: 18px; padding: 1rem;
+}
+.goal-card.is-achieved { border-color: #BBF7D0; background: #F0FDF4; }
+.goal-icon {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px;
+    display: grid; place-items: center; font-size: 1.25rem;
+    background: var(--kw-pink-soft); color: var(--kw-pink);
+}
+.goal-card.is-achieved .goal-icon { background: #DCFCE7; color: var(--kw-green); }
+.goal-progress { height: 12px; border-radius: 999px; background: var(--kw-border); }
+.goal-progress .progress-bar {
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7C3AED, var(--kw-pink));
+}
+.goal-card.is-achieved .goal-progress .progress-bar { background: var(--kw-green); }
+.goal-actions {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between;
+    margin-top: .9rem; padding-top: .9rem; border-top: 1px dashed var(--kw-border);
+}
+.goal-actions .input-group { flex: 1 1 160px; max-width: 220px; }
+.celebrate-icon {
+    width: 84px; height: 84px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 2.5rem;
+    background: #FEF3C7; color: #F59E0B;
+}

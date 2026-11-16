@@ -30,6 +30,9 @@
         <a href="{{ route('child.spend.create') }}" @class(['nav-link', 'active' => request()->routeIs('child.spend.*')])>
             <i class="bi bi-bag-check"></i> Spend money
         </a>
+        <a href="{{ route('child.goals.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.goals.*')])>
+            <i class="bi bi-piggy-bank"></i> Savings goals
+        </a>
         <a href="{{ route('child.purchases.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.purchases.*')])>
             <i class="bi bi-patch-question"></i> Ask to buy
             @if ($readyToBuy > 0)

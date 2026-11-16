@@ -39,6 +39,7 @@
                     </span>
                 </div>
                 <div class="balance-amount mt-2">৳{{ number_format($wallet->balance, 2) }}</div>
+                <div class="small opacity-75 mt-1"><i class="bi bi-piggy-bank"></i> Plus ৳{{ number_format($totalSaved, 2) }} in savings goals</div>
             </div>
         </div>
         <div class="col-sm-6 col-lg-3">
@@ -61,7 +62,7 @@
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-3">
         {{-- F2: Smart Spending Limits --}}
         <div class="col-lg-6">
             <div class="kw-card h-100">
@@ -123,6 +124,23 @@
                 @endif
             </div>
         </div>
+    </div>
+
+    {{-- F3: Savings goals (view only) --}}
+    <div class="kw-card mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-semibold"><i class="bi bi-piggy-bank text-kw"></i> {{ $firstName }}'s savings goals</div>
+            <span class="small text-secondary">৳{{ number_format($totalSaved, 2) }} saved</span>
+        </div>
+        @if ($goals->isEmpty())
+            <p class="small text-secondary mb-0">{{ $firstName }} hasn't created any savings goals yet.</p>
+        @else
+            <div class="row g-3">
+                @foreach ($goals as $goal)
+                    <div class="col-lg-6">@include('partials.goal-card', ['goal' => $goal])</div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
     <div class="kw-card">

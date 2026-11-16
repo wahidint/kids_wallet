@@ -72,15 +72,33 @@ class Transaction extends Model
 
     /* ---------------- Query scopes ---------------- */
 
-    /** Usage: $wallet->transactions()->credits()->get() */
+    /** All money IN, including savings withdrawals. */
     public function scopeCredits(Builder $query): Builder
     {
         return $query->where('type', TransactionType::Credit);
     }
 
-    /** Usage: $wallet->transactions()->debits()->get() */
+    /** All money OUT, including savings deposits. */
     public function scopeDebits(Builder $query): Builder
     {
         return $query->where('type', TransactionType::Debit);
+    }
+
+    /** Real income: pocket money and allowances (not savings moves). */
+    public function scopeIncome(Builder $query): Builder
+    {
+        return $query->whereIn('source', [
+            TransactionSource::PocketMoney->value,
+            TransactionSource::Allowance->value,
+        ]);
+    }
+
+    /** Real expenses: everyday spending and approved purchases (not savings moves). */
+    public function scopeExpenses(Builder $query): Builder
+    {
+        return $query->whereIn('source', [
+            TransactionSource::Spend->value,
+            TransactionSource::Purchase->value,
+        ]);
     }
 }

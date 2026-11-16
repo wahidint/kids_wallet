@@ -22,8 +22,9 @@ class DashboardController extends Controller
             '0.00'
         );
 
+        // Real spending only (moving money into savings doesn't count)
         $monthSpending = Transaction::whereIn('wallet_id', $walletIds)
-            ->debits()
+            ->expenses()
             ->where('created_at', '>=', now()->startOfMonth())
             ->sum('amount');
 
