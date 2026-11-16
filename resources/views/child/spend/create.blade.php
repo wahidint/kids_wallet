@@ -4,6 +4,8 @@
 
 @section('content')
     @php
+        $usage = $wallet->limitUsage();
+        $tightest = collect($usage)->sortBy(fn ($row) => (float) $row['remaining'])->first();
         $tip = \Illuminate\Support\Arr::random([
             'Before you buy, ask: is it a need or a want?',
             'Waiting one day before buying something big helps you decide if you really want it.',
@@ -37,13 +39,29 @@
             @endif
 
             <div class="kw-card p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <div class="small text-secondary">Available balance</div>
                         <div class="fs-3 fw-bold">৳{{ number_format($wallet->balance, 2) }}</div>
                     </div>
                     <div class="stat-icon"><i class="bi bi-bag-check"></i></div>
                 </div>
+
+                @if ($tightest)
+                    <div @class([
+                            'limit-summary mb-4',
+                            'is-warning' => $tightest['status'] === 'warning',
+                            'is-reached' => $tightest['status'] === 'reached',
+                         ])>
+                        <i class="bi bi-speedometer2"></i>
+                        @if ($tightest['status'] === 'reached')
+                            You've reached your {{ $tightest['period'] }} spending limit.
+                        @else
+                            You can spend up to <strong>৳{{ number_format($tightest['remaining'], 2) }}</strong>
+                            more {{ strtolower($tightest['label']) }}.
+                        @endif
+                    </div>
+                @endif
 
                 <form method="POST" action="{{ route('child.spend.store') }}" id="spendForm" novalidate>
                     @csrf

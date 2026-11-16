@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\PocketMoneyController;
+use App\Http\Controllers\Parent\SpendingLimitController;
 use App\Http\Controllers\Parent\WalletLockController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,10 @@ Route::middleware('auth')->group(function () {
                 // F1: Digital Pocket Money
                 Route::get('/add-money', [PocketMoneyController::class, 'create'])->name('pocket-money.create');
                 Route::post('/add-money', [PocketMoneyController::class, 'store'])->name('pocket-money.store');
+
+                // F2: Smart Spending Limits
+                Route::get('/limits', [SpendingLimitController::class, 'edit'])->name('limits.edit');
+                Route::put('/limits', [SpendingLimitController::class, 'update'])->name('limits.update');
 
                 // F9: Emergency Wallet Lock
                 Route::post('/lock', [WalletLockController::class, 'store'])->name('lock');

@@ -3,7 +3,10 @@
 @section('title', $child->name)
 
 @section('content')
-    @php $firstName = \Illuminate\Support\Str::before($child->name, ' '); @endphp
+    @php
+        $firstName = \Illuminate\Support\Str::before($child->name, ' ');
+        $usage = $wallet->limitUsage();
+    @endphp
 
     <a href="{{ route('parent.dashboard') }}" class="text-secondary text-decoration-none small">
         <i class="bi bi-arrow-left"></i> Back to dashboard
@@ -58,44 +61,68 @@
         </div>
     </div>
 
-    {{-- F9: Emergency Wallet Lock --}}
-    <div @class(['kw-card lock-card mb-4 d-flex flex-wrap align-items-center gap-3', 'is-locked' => $wallet->is_locked])>
-        <div class="lock-icon">
-            <i class="bi {{ $wallet->is_locked ? 'bi-lock-fill' : 'bi-unlock' }}"></i>
-        </div>
-        <div class="flex-grow-1 min-w-0">
-            <div class="fw-semibold">Emergency wallet lock</div>
-            @if ($wallet->is_locked)
-                <div class="small">
-                    <span class="text-danger fw-semibold">Locked</span>
-                    by {{ $wallet->lockedBy?->name ?? 'a parent' }}{{ $wallet->locked_at ? ' on '.$wallet->locked_at->format('j M Y, g:i A') : '' }}.
-                    @if ($wallet->lock_reason)
-                        Reason: “{{ $wallet->lock_reason }}”.
-                    @endif
-                    Spending is paused; you can still add money.
+    <div class="row g-3 mb-4">
+        {{-- F2: Smart Spending Limits --}}
+        <div class="col-lg-6">
+            <div class="kw-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="fw-semibold"><i class="bi bi-speedometer2 text-kw"></i> Spending limits</div>
+                    <a href="{{ route('parent.children.limits.edit', $child) }}" class="btn btn-sm btn-light border rounded-pill px-3">
+                        <i class="bi bi-pencil"></i> {{ empty($usage) ? 'Set limits' : 'Edit' }}
+                    </a>
                 </div>
-            @else
-                <div class="small text-secondary">
-                    <span class="text-success fw-semibold">Active.</span>
-                    Lost phone or something looks wrong? Lock the wallet to stop all spending instantly.
-                </div>
-            @endif
+
+                @if (empty($usage))
+                    <p class="small text-secondary mb-0">
+                        No limits set. Daily, weekly or monthly limits help {{ $firstName }} learn to budget.
+                    </p>
+                @else
+                    @include('partials.limit-usage', ['usage' => $usage])
+                @endif
+            </div>
         </div>
 
-        @if ($wallet->is_locked)
-            <form method="POST" action="{{ route('parent.children.unlock', $child) }}"
-                  onsubmit="return confirm('Unlock {{ $firstName }}\'s wallet? Spending will be allowed again.');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-success rounded-pill px-4">
-                    <i class="bi bi-unlock"></i> Unlock wallet
-                </button>
-            </form>
-        @else
-            <button type="button" class="btn btn-outline-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#lockModal">
-                <i class="bi bi-lock"></i> Lock wallet
-            </button>
-        @endif
+        {{-- F9: Emergency Wallet Lock --}}
+        <div class="col-lg-6">
+            <div @class(['kw-card lock-card h-100 d-flex flex-wrap align-items-center gap-3', 'is-locked' => $wallet->is_locked])>
+                <div class="lock-icon">
+                    <i class="bi {{ $wallet->is_locked ? 'bi-lock-fill' : 'bi-unlock' }}"></i>
+                </div>
+                <div class="flex-grow-1 min-w-0">
+                    <div class="fw-semibold">Emergency wallet lock</div>
+                    @if ($wallet->is_locked)
+                        <div class="small">
+                            <span class="text-danger fw-semibold">Locked</span>
+                            by {{ $wallet->lockedBy?->name ?? 'a parent' }}{{ $wallet->locked_at ? ' on '.$wallet->locked_at->format('j M Y, g:i A') : '' }}.
+                            @if ($wallet->lock_reason)
+                                Reason: “{{ $wallet->lock_reason }}”.
+                            @endif
+                            Spending is paused; you can still add money.
+                        </div>
+                    @else
+                        <div class="small text-secondary">
+                            <span class="text-success fw-semibold">Active.</span>
+                            Lost phone or something looks wrong? Lock the wallet to stop all spending instantly.
+                        </div>
+                    @endif
+                </div>
+
+                @if ($wallet->is_locked)
+                    <form method="POST" action="{{ route('parent.children.unlock', $child) }}"
+                          onsubmit="return confirm('Unlock {{ $firstName }}\'s wallet? Spending will be allowed again.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-success rounded-pill px-4">
+                            <i class="bi bi-unlock"></i> Unlock wallet
+                        </button>
+                    </form>
+                @else
+                    <button type="button" class="btn btn-outline-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#lockModal">
+                        <i class="bi bi-lock"></i> Lock wallet
+                    </button>
+                @endif
+            </div>
+        </div>
     </div>
 
     <div class="kw-card">

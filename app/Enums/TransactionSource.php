@@ -34,6 +34,24 @@ enum TransactionSource: string
         };
     }
 
+    /**
+     * Does this count toward spending limits (F2)?
+     * Moving money into savings is NOT spending.
+     */
+    public function countsAsSpending(): bool
+    {
+        return in_array($this, [self::Spend, self::Purchase], true);
+    }
+
+    /** Database values of all spending sources, e.g. ['spend', 'purchase']. */
+    public static function spendingValues(): array
+    {
+        return array_values(array_map(
+            fn (self $source) => $source->value,
+            array_filter(self::cases(), fn (self $source) => $source->countsAsSpending())
+        ));
+    }
+
     public function label(): string
     {
         return match ($this) {

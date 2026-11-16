@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\SpendingLimitService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Wallet extends Model
 {
@@ -39,5 +41,20 @@ class Wallet extends Model
     public function lockedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'locked_by');
+    }
+
+    /** Daily / weekly / monthly limits (Feature 2). */
+    public function spendingLimit(): HasOne
+    {
+        return $this->hasOne(SpendingLimit::class);
+    }
+
+    /**
+     * Spending vs. limits for each period that has a limit.
+     * Used by the parent wallet page, child dashboard and spend page.
+     */
+    public function limitUsage(): array
+    {
+        return app(SpendingLimitService::class)->usage($this);
     }
 }

@@ -3,6 +3,8 @@
 @section('title', 'My Wallet')
 
 @section('content')
+    @php $usage = $wallet->limitUsage(); @endphp
+
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <h2 class="h3 fw-bold mb-1">Hi {{ \Illuminate\Support\Str::before($child->name, ' ') }}! 👋</h2>
@@ -31,7 +33,7 @@
 
     <div class="row g-4 mb-4">
         <div class="col-lg-7">
-            <div class="kw-card balance-card h-100 p-4">
+            <div class="kw-card balance-card p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="small opacity-75">Available balance</div>
@@ -61,9 +63,15 @@
 
         <div class="col-lg-5">
             <div class="kw-card h-100">
+                @if (! empty($usage))
+                    <h3 class="h6 fw-semibold mb-3"><i class="bi bi-speedometer2 text-kw"></i> My spending limits</h3>
+                    @include('partials.limit-usage', ['usage' => $usage])
+                    <hr class="my-3">
+                @endif
+
                 <h3 class="h6 fw-semibold mb-3"><i class="bi bi-people-fill text-kw"></i> My family</h3>
                 @forelse ($parents as $parent)
-                    <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="avatar">{{ mb_strtoupper(mb_substr($parent->name, 0, 1)) }}</div>
                         <div>
                             <div class="fw-semibold">{{ $parent->name }}</div>
