@@ -60,6 +60,23 @@
                 </div>
             </div>
 
+            {{-- F7: Next allowance --}}
+            @php
+                $nextAllowance = \App\Models\AllowanceSchedule::where('wallet_id', $wallet->id)
+                    ->where('is_active', true)->orderBy('next_run_at')->first();
+            @endphp
+            @if ($nextAllowance)
+                @php $daysUntil = (int) now()->startOfDay()->diffInDays($nextAllowance->next_run_at, false); @endphp
+                <div class="next-allowance mb-4">
+                    <i class="bi bi-calendar-heart"></i>
+                    <div>
+                        Next allowance: <strong>৳{{ number_format($nextAllowance->amount, 2) }}</strong>
+                        on {{ $nextAllowance->next_run_at->format('D, j M') }}
+                        <span class="text-secondary">({{ $daysUntil <= 0 ? 'today!' : 'in '.$daysUntil.' '.\Illuminate\Support\Str::plural('day', $daysUntil) }})</span>
+                    </div>
+                </div>
+            @endif
+            
             {{-- F3: Savings goals --}}
             <div class="kw-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">

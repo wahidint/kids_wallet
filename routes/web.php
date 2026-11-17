@@ -11,6 +11,7 @@ use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\Child\TransactionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Parent\AllowanceController;
 use App\Http\Controllers\Parent\ChildController;
 use App\Http\Controllers\Parent\ChildInsightsController;
 use App\Http\Controllers\Parent\ChildTransactionController;
@@ -77,6 +78,15 @@ Route::middleware('auth')->group(function () {
                 // F5: Smart Expense Tracker
                 Route::get('/transactions', [ChildTransactionController::class, 'index'])->name('transactions.index');
                 Route::get('/transactions/export', [ChildTransactionController::class, 'export'])->name('transactions.export');
+
+                // F7: Allowance Scheduler
+                Route::get('/allowances', [AllowanceController::class, 'index'])->name('allowances.index');
+                Route::get('/allowances/new', [AllowanceController::class, 'create'])->name('allowances.create');
+                Route::post('/allowances', [AllowanceController::class, 'store'])->name('allowances.store');
+                Route::get('/allowances/{schedule}/edit', [AllowanceController::class, 'edit'])->name('allowances.edit');
+                Route::put('/allowances/{schedule}', [AllowanceController::class, 'update'])->name('allowances.update');
+                Route::patch('/allowances/{schedule}/toggle', [AllowanceController::class, 'toggle'])->name('allowances.toggle');
+                Route::delete('/allowances/{schedule}', [AllowanceController::class, 'destroy'])->name('allowances.destroy');
 
                 // F8: Spending Insights
                 Route::get('/insights', [ChildInsightsController::class, 'index'])->name('insights');

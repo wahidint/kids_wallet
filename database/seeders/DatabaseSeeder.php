@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DemoSpendingLimitSeeder::class,
             DemoPurchaseRequestSeeder::class,
             DemoSavingsGoalSeeder::class,
+            DemoAllowanceSeeder::class,
         ]);
     }
 }

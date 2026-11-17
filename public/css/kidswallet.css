@@ -334,3 +334,18 @@ body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe
 .insight-item.is-success { background: #ECFDF5; color: #065F46; }
 .insight-item.is-warning { background: #FFFBEB; color: #92400E; }
 .insight-item.is-info { background: #EFF6FF; color: #1E40AF; }
+
+/* ---------- F7: Allowance scheduler ---------- */
+.schedule-card { border-left: 4px solid var(--kw-pink); }
+.schedule-card.is-paused { border-left-color: #9CA3AF; opacity: .75; }
+.schedule-icon {
+    width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
+    display: grid; place-items: center; font-size: 1.3rem;
+    background: var(--kw-pink-soft); color: var(--kw-pink);
+}
+.next-allowance {
+    display: flex; gap: .75rem; align-items: center;
+    background: #fff; border: 1px dashed var(--kw-pink);
+    border-radius: 16px; padding: .8rem 1rem;
+}
+.next-allowance > i { font-size: 1.4rem; color: var(--kw-pink); }
