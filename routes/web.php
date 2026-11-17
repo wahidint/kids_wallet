@@ -8,8 +8,10 @@ use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
 use App\Http\Controllers\Child\PurchaseRequestController;
 use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
+use App\Http\Controllers\Child\TransactionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
+use App\Http\Controllers\Parent\ChildTransactionController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\PocketMoneyController;
 use App\Http\Controllers\Parent\PurchaseApprovalController;
@@ -70,6 +72,10 @@ Route::middleware('auth')->group(function () {
                 Route::get('/limits', [SpendingLimitController::class, 'edit'])->name('limits.edit');
                 Route::put('/limits', [SpendingLimitController::class, 'update'])->name('limits.update');
 
+                // F5: Smart Expense Tracker
+                Route::get('/transactions', [ChildTransactionController::class, 'index'])->name('transactions.index');
+                Route::get('/transactions/export', [ChildTransactionController::class, 'export'])->name('transactions.export');
+
                 // F9: Emergency Wallet Lock
                 Route::post('/lock', [WalletLockController::class, 'store'])->name('lock');
                 Route::delete('/lock', [WalletLockController::class, 'destroy'])->name('unlock');
@@ -103,5 +109,9 @@ Route::middleware('auth')->group(function () {
             ->name('purchases.complete')->can('manageOwn', 'purchase');
         Route::post('/purchases/{purchase}/cancel', [PurchaseRequestController::class, 'cancel'])
             ->name('purchases.cancel')->can('manageOwn', 'purchase');
+
+        // F5: Smart Expense Tracker
+        Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+        Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
     });
 });

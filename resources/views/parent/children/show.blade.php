@@ -146,7 +146,9 @@
     <div class="kw-card">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h3 class="h6 fw-semibold mb-0">Transaction history</h3>
-            <span class="small text-secondary">{{ $transactions->total() }} transactions</span>
+            <a href="{{ route('parent.children.transactions.index', $child) }}" class="small text-kw text-decoration-none">
+                Filter &amp; export ({{ $transactions->total() }}) <i class="bi bi-chevron-right"></i>
+            </a>
         </div>
 
         @forelse ($transactions as $transaction)

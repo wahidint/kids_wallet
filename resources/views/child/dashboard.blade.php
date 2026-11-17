@@ -106,7 +106,12 @@
     </div>
 
     <div class="kw-card">
-        <h3 class="h6 fw-semibold mb-2">Recent transactions</h3>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="h6 fw-semibold mb-0">Recent transactions</h3>
+            <a href="{{ route('child.transactions.index') }}" class="small text-kw text-decoration-none">
+                See all <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
         @forelse ($recentTransactions as $transaction)
             @include('partials.transaction-row')
         @empty

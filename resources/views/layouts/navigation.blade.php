@@ -39,6 +39,9 @@
                 <span class="badge rounded-pill text-bg-info ms-auto">{{ $readyToBuy }}</span>
             @endif
         </a>
+        <a href="{{ route('child.transactions.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.transactions.*')])>
+            <i class="bi bi-clock-history"></i> History
+        </a>
     @endif
 </nav>
 
