@@ -1,6 +1,6 @@
-# Kids Wallet
+# Shonchoy
 
-A bKash-inspired digital wallet for children under 16, with parental supervision.
+**Shonchoy** (সঞ্চয়, "savings") is a digital pocket-money wallet for children under 16, with parental supervision.
 Laravel 12 · MySQL (XAMPP) · Bootstrap 5 · Chart.js
 
 > Academic simulation project: no real money is transferred.

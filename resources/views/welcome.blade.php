@@ -24,11 +24,11 @@
     <div class="row align-items-center g-5">
         <div class="col-lg-6">
             <span class="badge rounded-pill bg-white text-kw border px-3 py-2 mb-3">
-                <i class="bi bi-stars"></i> Financial literacy for under-16s
+                <i class="bi bi-stars"></i> সঞ্চয় · Shonchoy means "savings"
             </span>
             <h1 class="display-4 fw-bold lh-sm">Pocket money that teaches <span class="text-kw">smart habits</span>.</h1>
             <p class="lead text-secondary my-4">
-                A bKash-inspired digital wallet where children save, spend and learn, and parents stay in control.
+                A digital pocket-money wallet where children save, spend and learn good money habits, and parents stay in control.
             </p>
             <div class="d-flex flex-wrap gap-3">
                 @auth
