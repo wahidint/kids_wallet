@@ -349,3 +349,22 @@ body { font-family: 'Poppins', 'Hind Siliguri', system-ui, -apple-system, 'Segoe
     border-radius: 16px; padding: .8rem 1rem;
 }
 .next-allowance > i { font-size: 1.4rem; color: var(--kw-pink); }
+
+/* ---------- F10: Savings rewards ---------- */
+.badge-medal {
+    --badge-color: var(--kw-pink);
+    width: 72px; height: 72px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 1.9rem; color: #fff;
+    background: var(--badge-color);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--badge-color) 20%, transparent);
+}
+.badge-medal-sm { width: 48px; height: 48px; font-size: 1.25rem; box-shadow: 0 0 0 3px color-mix(in srgb, var(--badge-color) 20%, transparent); }
+.is-locked .badge-medal { background: #E5E7EB; color: #9CA3AF; box-shadow: none; }
+.reward-card.is-locked h3 { color: var(--kw-muted); }
+.badge-mini { width: 86px; }
+.badge-mini.is-locked .small { color: var(--kw-muted); }
+
+.badge-unlocked {
+    display: flex; align-items: center; gap: .9rem;
+    background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;
+}

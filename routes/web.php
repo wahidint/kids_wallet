@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
 use App\Http\Controllers\Child\InsightsController;
 use App\Http\Controllers\Child\PurchaseRequestController;
+use App\Http\Controllers\Child\RewardController;
 use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\Child\TransactionController;
@@ -98,7 +99,8 @@ Route::middleware('auth')->group(function () {
     });
 
     // ---------------- Child-only pages ----------------
-    Route::middleware('role:child')->prefix('child')->name('child.')->group(function () {
+    // "badges" (F10) checks for newly earned badges on every child page
+    Route::middleware(['role:child', 'badges'])->prefix('child')->name('child.')->group(function () {
         Route::get('/dashboard', [ChildDashboardController::class, 'index'])->name('dashboard');
 
         // F2: Child spending (limits are checked inside WalletService)
@@ -131,5 +133,8 @@ Route::middleware('auth')->group(function () {
 
         // F8: Spending Insights
         Route::get('/insights', [InsightsController::class, 'index'])->name('insights');
+
+        // F10: Savings Rewards
+        Route::get('/rewards', [RewardController::class, 'index'])->name('rewards');
     });
 });

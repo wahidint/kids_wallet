@@ -11,9 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Give our role guard the short name "role" for use in routes
+        // Short names for our middleware, used in routes/web.php
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+            'badges' => \App\Http\Middleware\AwardBadges::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

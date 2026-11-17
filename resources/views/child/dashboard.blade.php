@@ -77,6 +77,29 @@
                 </div>
             @endif
             
+            {{-- F10: My badges --}}
+            @php $myBadges = \App\Models\UserBadge::where('user_id', $child->id)->get(); @endphp
+            <div class="kw-card mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h6 fw-semibold mb-0">
+                        <i class="bi bi-award text-kw"></i> My badges
+                        <span class="text-secondary fw-normal small">· {{ $myBadges->count() }} of {{ count(\App\Enums\Badge::cases()) }}</span>
+                    </h3>
+                    <a href="{{ route('child.rewards') }}" class="small text-kw text-decoration-none">See all <i class="bi bi-chevron-right"></i></a>
+                </div>
+                <div class="d-flex flex-wrap gap-3">
+                    @foreach (\App\Enums\Badge::cases() as $badge)
+                        @php $has = $myBadges->firstWhere('badge', $badge); @endphp
+                        <div @class(['badge-mini text-center', 'is-locked' => ! $has]) title="{{ $badge->label() }}: {{ $badge->description() }}">
+                            <div class="badge-medal badge-medal-sm mx-auto" style="--badge-color: {{ $badge->color() }};">
+                                <i class="bi {{ $has ? $badge->icon() : 'bi-lock-fill' }}"></i>
+                            </div>
+                            <div class="small mt-1">{{ $badge->label() }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
             {{-- F3: Savings goals --}}
             <div class="kw-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
