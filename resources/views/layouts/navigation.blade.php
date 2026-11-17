@@ -45,6 +45,9 @@
         <a href="{{ route('child.insights') }}" @class(['nav-link', 'active' => request()->routeIs('child.insights')])>
             <i class="bi bi-pie-chart"></i> Insights
         </a>
+        <a href="{{ route('child.quizzes.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.quizzes.*')])>
+            <i class="bi bi-controller"></i> Learn &amp; play
+        </a>
         <a href="{{ route('child.rewards') }}" @class(['nav-link', 'active' => request()->routeIs('child.rewards')])>
             <i class="bi bi-award"></i> Rewards
         </a>

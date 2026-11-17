@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
 use App\Http\Controllers\Child\InsightsController;
 use App\Http\Controllers\Child\PurchaseRequestController;
+use App\Http\Controllers\Child\QuizController;
 use App\Http\Controllers\Child\RewardController;
 use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
@@ -130,6 +131,14 @@ Route::middleware('auth')->group(function () {
         // F5: Smart Expense Tracker
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
         Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
+
+        // F6: Financial Learning Games
+        Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+        Route::get('/quizzes/attempts/{attempt}', [QuizController::class, 'result'])->name('quizzes.result');
+        Route::get('/quizzes/{quiz:slug}', [QuizController::class, 'play'])->name('quizzes.play');
+        Route::post('/quizzes/{quiz:slug}/check', [QuizController::class, 'check'])
+            ->name('quizzes.check')->middleware('throttle:60,1');
+        Route::post('/quizzes/{quiz:slug}/finish', [QuizController::class, 'finish'])->name('quizzes.finish');
 
         // F8: Spending Insights
         Route::get('/insights', [InsightsController::class, 'index'])->name('insights');

@@ -8,12 +8,16 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Runs when you type: php artisan db:seed (or migrate:fresh --seed).
-     * Order matters: categories first, then history, then features that use the balances.
+     * App content first, then demo data in dependency order.
      */
     public function run(): void
     {
         $this->call([
+            // App content
             SpendingCategorySeeder::class,
+            QuizSeeder::class,
+
+            // Demo data
             DemoDataSeeder::class,
             DemoSpendingLimitSeeder::class,
             DemoPurchaseRequestSeeder::class,
