@@ -23,6 +23,9 @@
                 {{ $child->email }}
             </div>
         </div>
+        <a href="{{ route('parent.children.insights', $child) }}" class="btn btn-light border rounded-pill px-4">
+            <i class="bi bi-pie-chart"></i> Insights
+        </a>
         <a href="{{ route('parent.children.pocket-money.create', $child) }}" class="btn btn-kw rounded-pill px-4">
             <i class="bi bi-plus-lg"></i> Add money
         </a>

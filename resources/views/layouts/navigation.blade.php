@@ -42,6 +42,9 @@
         <a href="{{ route('child.transactions.index') }}" @class(['nav-link', 'active' => request()->routeIs('child.transactions.*')])>
             <i class="bi bi-clock-history"></i> History
         </a>
+        <a href="{{ route('child.insights') }}" @class(['nav-link', 'active' => request()->routeIs('child.insights')])>
+            <i class="bi bi-pie-chart"></i> Insights
+        </a>
     @endif
 </nav>
 

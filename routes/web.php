@@ -5,12 +5,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
+use App\Http\Controllers\Child\InsightsController;
 use App\Http\Controllers\Child\PurchaseRequestController;
 use App\Http\Controllers\Child\SavingsGoalController;
 use App\Http\Controllers\Child\SpendController;
 use App\Http\Controllers\Child\TransactionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController;
+use App\Http\Controllers\Parent\ChildInsightsController;
 use App\Http\Controllers\Parent\ChildTransactionController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\PocketMoneyController;
@@ -76,6 +78,9 @@ Route::middleware('auth')->group(function () {
                 Route::get('/transactions', [ChildTransactionController::class, 'index'])->name('transactions.index');
                 Route::get('/transactions/export', [ChildTransactionController::class, 'export'])->name('transactions.export');
 
+                // F8: Spending Insights
+                Route::get('/insights', [ChildInsightsController::class, 'index'])->name('insights');
+
                 // F9: Emergency Wallet Lock
                 Route::post('/lock', [WalletLockController::class, 'store'])->name('lock');
                 Route::delete('/lock', [WalletLockController::class, 'destroy'])->name('unlock');
@@ -113,5 +118,8 @@ Route::middleware('auth')->group(function () {
         // F5: Smart Expense Tracker
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
         Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
+
+        // F8: Spending Insights
+        Route::get('/insights', [InsightsController::class, 'index'])->name('insights');
     });
 });
